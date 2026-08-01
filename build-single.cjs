@@ -14,7 +14,11 @@ const safeCss = s => s.replace(/<\/(style)/gi, '<\\/$1');
 
 const mainCss   = safeCss(R('assets/index-BjG4I1I8.css'));
 const enhCss    = safeCss(R('enhance.css'));
-const enhJs     = safeJs(R('enhance.js'));
+// firma logosunu data-URI yap, enhance.js icindeki yer tutucuyu doldur
+const firmaMime = (function(){ const b = fs.readFileSync(path.join(DIR,'fartech-logo.jpg')); return (b[0]===0xFF&&b[1]===0xD8)?'image/jpeg':(b[0]===0x89?'image/png':'application/octet-stream'); })();
+const firmaData = 'data:' + firmaMime + ';base64,' + B64('fartech-logo.jpg');
+let enhJsRaw    = R('enhance.js').split('__FIRMA_IMG__').join(firmaData);
+const enhJs     = safeJs(enhJsRaw);
 
 // gorseli data-URI yap (gercek turu sihirli baytlardan sniff et), bundle referansini degistir
 function sniffMime(f) {

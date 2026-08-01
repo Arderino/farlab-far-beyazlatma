@@ -63,6 +63,24 @@
   100%{ box-shadow: 0 0 0 0    rgba(37,211,102,0); }
 }
 
+/* ---------- Atolye / FarTech marka bandi ---------- */
+.fx-firma{
+  padding: 90px 24px;
+  background: radial-gradient(circle at 50% 38%, rgba(224,180,75,.10), transparent 62%), #05080d;
+  text-align: center;
+}
+.fx-firma-inner{ max-width: 760px; margin: 0 auto; }
+.fx-firma-logo img{
+  width: min(320px, 72vw); height: auto; border-radius: 50%; display: block; margin: 0 auto;
+  box-shadow: 0 0 0 1px rgba(224,180,75,.25),
+              0 30px 80px -22px rgba(224,180,75,.35),
+              0 20px 60px -20px rgba(0,0,0,.85);
+}
+.fx-firma-tag{
+  margin: 28px auto 0; max-width: 620px;
+  color: #c9d6e5; font-size: 1.05rem; line-height: 1.65;
+}
+
 /* ---------- Erisilebilirlik: hareket azaltma tercihi ---------- */
 @media (prefers-reduced-motion: reduce){
   .fr-reveal{ opacity: 1 !important; transform: none !important; transition: none !important; }

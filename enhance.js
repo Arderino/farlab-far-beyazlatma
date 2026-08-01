@@ -75,6 +75,21 @@
       D.body.appendChild(wa);
     }
 
+    /* 5b) Atolye / FarTech bolumu — randevunun ustune ortali marka bandi */
+    if (!D.querySelector(".fx-firma")) {
+      var anchor = D.querySelector(".booking-section") || D.querySelector("footer");
+      if (anchor && anchor.parentNode) {
+        var fsec = D.createElement("section");
+        fsec.className = "fx-firma fr-reveal";
+        fsec.innerHTML =
+          '<div class="fx-firma-inner">' +
+            '<div class="fx-firma-logo"><img src="__FIRMA_IMG__" alt="FarTech logo" loading="lazy"></div>' +
+            '<p class="fx-firma-tag">Sararmış ve matlaşmış farları ilk günkü netliğine döndürüyoruz. Marka bağımsız, garantili işçilik.</p>' +
+          '</div>';
+        anchor.parentNode.insertBefore(fsec, anchor);
+      }
+    }
+
     /* 6) IntersectionObserver: eleman gorunur olunca .fr-in ekle (KILIT SATIR)
        ONEMLI: siniflar mount'tan SONRA eklendigi icin, ilk gizlemeyi
        transition'siz yapariz (fr-prep) -> "sonup tekrar belirme" flasi olmaz. */
