@@ -1,0 +1,70 @@
+/* =========================================================
+   FarLab — Animasyon Katmani
+   KRM Elektronik'ten uyarlandi (floaty / ringpulse / scroll-reveal)
+   Renkler FarLab altin paletine gore ayarlandi.
+   ========================================================= */
+
+:root{
+  --fr-ease: cubic-bezier(.22, 1, .36, 1);   /* KRM'nin yumusak "yavas dur" egrisi */
+}
+
+/* ---------- Scroll reveal (kaydirinca alttan belir) ----------
+   JS varsa gizle+animasyonla; JS yoksa icerik hep gorunur kalir. */
+.fr-reveal{
+  transition: opacity .7s var(--fr-ease), transform .7s var(--fr-ease);
+  will-change: opacity, transform;
+}
+.fr-js .fr-reveal{ opacity: 0; transform: translateY(26px); }
+.fr-js .fr-reveal.fr-fade{ transform: none; }   /* kendi transform'u olan eleman: sadece opaklik */
+.fr-reveal.fr-prep{ transition: none !important; }  /* ilk gizleme aninda flas olmasin */
+.fr-reveal.fr-in{ opacity: 1; transform: none; }
+
+/* ---------- floaty: hero gorseli hafifce suzulur ---------- */
+@keyframes fxFloaty{
+  0%, 100%{ transform: translateY(0); }
+  50%     { transform: translateY(-14px); }
+}
+.fx-floaty{ animation: fxFloaty 7s ease-in-out infinite; }
+
+/* ---------- ringpulse: CTA dikkat nabzi (altin) ---------- */
+@keyframes fxRing{
+  0%  { box-shadow: 0 0 0 0    rgba(224,180,75,.55); }
+  70% { box-shadow: 0 0 0 20px rgba(224,180,75,0); }
+  100%{ box-shadow: 0 0 0 0    rgba(224,180,75,0); }
+}
+.fx-pulse{ position: relative; }
+.fx-pulse::after{
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: fxRing 2.4s ease-out infinite;
+}
+
+/* ---------- WhatsApp yuvarlagi (sag alt, sabit) — KRM'deki .fab-wa ---------- */
+.fx-wa{
+  position: fixed; right: 20px; bottom: 20px; z-index: 60;
+  width: 60px; height: 60px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: #25D366; color: #fff;
+  box-shadow: 0 14px 30px -8px rgba(37,211,102,.55);
+  transition: transform .25s var(--fr-ease), box-shadow .25s var(--fr-ease);
+}
+.fx-wa:hover{ transform: scale(1.06); box-shadow: 0 20px 46px -14px rgba(37,211,102,.6); }
+.fx-wa svg{ width: 32px; height: 32px; }
+.fx-wa::before{                      /* KRM'deki genisleyen yesil halka */
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid #25D366; pointer-events: none;
+  animation: fxRingWa 2.6s ease-out infinite;
+}
+@keyframes fxRingWa{
+  0%  { box-shadow: 0 0 0 0    rgba(37,211,102,.5); }
+  70% { box-shadow: 0 0 0 22px rgba(37,211,102,0); }
+  100%{ box-shadow: 0 0 0 0    rgba(37,211,102,0); }
+}
+
+/* ---------- Erisilebilirlik: hareket azaltma tercihi ---------- */
+@media (prefers-reduced-motion: reduce){
+  .fr-reveal{ opacity: 1 !important; transform: none !important; transition: none !important; }
+  .fx-floaty, .fx-pulse::after, .fx-wa::before{ animation: none !important; }
+}

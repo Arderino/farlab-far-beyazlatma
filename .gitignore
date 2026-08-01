@@ -1,0 +1,6 @@
+node_modules/
+*.log
+chrome-verify-profile/
+cvp2/
+.DS_Store
+Thumbs.db
