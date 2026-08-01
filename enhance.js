@@ -1,5 +1,5 @@
 /* =========================================================
-   FarLab — Animasyon Katmani (calisma zamani)
+   FarTech — Animasyon Katmani (calisma zamani)
    React SPA mount olduktan SONRA calisir; markup'a dokunmadan
    dogru elemanlara animasyon siniflarini ekler.
    ========================================================= */

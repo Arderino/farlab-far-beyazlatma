@@ -28,6 +28,9 @@ const imgMime = sniffMime('far-beyazlatma-kampanya.png');
 const imgData = 'data:' + imgMime + ';base64,' + B64('far-beyazlatma-kampanya.png');
 let bundleJs = R('assets/index-D8F6OuLR.js');
 bundleJs = bundleJs.split('/far-beyazlatma-kampanya.png').join(imgData);
+// Marka: FarLab -> FarTech ("far beyazlatma" kelimesine DOKUNMA)
+bundleJs = bundleJs.split('`LAB`').join('`TECH`');   // logo: FAR|LAB -> FAR|TECH
+bundleJs = bundleJs.split('FarLab').join('FarTech'); // aria-label + footer telif
 bundleJs = safeJs(bundleJs);
 
 const favData = 'data:image/svg+xml;base64,' + B64('favicon.svg');
@@ -40,10 +43,10 @@ const html = `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050b11" />
     <meta name="description" content="Sararmis ve matlasmis araba farlarina temiz, net ve dogal gorunum kazandiran profesyonel far beyazlatma hizmeti." />
-    <meta property="og:title" content="FarLab | Profesyonel Far Beyazlatma" />
+    <meta property="og:title" content="FarTech | Profesyonel Far Beyazlatma" />
     <meta property="og:description" content="Farlarin yenilensin, yolun aydinlansin. Kampanya fiyati 999 TL." />
     <meta property="og:type" content="website" />
-    <title>FarLab | Profesyonel Far Beyazlatma</title>
+    <title>FarTech | Profesyonel Far Beyazlatma</title>
     <style>${mainCss}</style>
     <style>${enhCss}</style>
   </head>
