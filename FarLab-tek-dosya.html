@@ -203,6 +203,10 @@ Error generating stack: `+e.message+`
   var D = document, H = D.documentElement;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // ==== TEK NUMARA ==== degistirince hem WhatsApp yuvarlagi hem randevu formu birlikte guncellenir.
+  // TEMSILI — gercek FarTech numarasiyla degistir (baginda 90, bosluksuz):
+  var WA = "905551066352";
+
   // JS aktif: reveal elemanlarini gizlemeye izin ver (JS yoksa gizlenmez).
   H.classList.add("fr-js");
 
@@ -255,7 +259,7 @@ Error generating stack: `+e.message+`
     if (!D.querySelector(".fx-wa")) {
       var wa = D.createElement("a");
       wa.className = "fx-wa";
-      wa.href = "https://wa.me/905551066352";   // temsili: poster'daki numara
+      wa.href = "https://wa.me/" + WA;   // TEK kaynak: yukaridaki WA sabiti
       wa.target = "_blank";
       wa.rel = "noopener";
       wa.setAttribute("aria-label", "WhatsApp ile yaz");
@@ -327,6 +331,39 @@ Error generating stack: `+e.message+`
         var sc = tsec.querySelectorAll(".fx-trust-stats > .fx-stat");
         for (var j = 0; j < sc.length; j++) sc[j].style.transitionDelay = (j * 70) + "ms";
       }
+    }
+
+    /* 5d) Randevu formu -> WhatsApp'a hazir mesaj (backend/kayit YOK, hesap gerekmez).
+       Musteri formu doldurur -> gonderince tum bilgiler isletmenin WhatsApp'ina hazir mesaj olur. */
+    var bform = D.querySelector(".booking-section form") || D.querySelector(".booking-card form") || D.querySelector("form");
+    if (bform && !bform.__fxWired) {
+      bform.__fxWired = true;
+      bform.addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();                 // React'in kendi onSubmit'ine ulasmasin
+        if (!bform.checkValidity()) { bform.reportValidity(); return; }   // zorunlu alan kontrolu
+
+        function val(n) { var el = bform.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ""; }
+        var ad = val("name"), tel = val("phone"), arac = val("car"), yil = val("year"), not = val("note");
+        var aracSatir = arac + (yil ? " (" + yil + ")" : "");
+
+        var msg =
+          "*FarTech — Randevu Talebi*\n" +
+          "👤 Ad: " + ad + "\n" +
+          "📞 Telefon: " + tel + "\n" +
+          "🚗 Araç: " + aracSatir + "\n" +
+          "📝 Not: " + (not || "-");
+
+        window.open("https://wa.me/" + WA + "?text=" + encodeURIComponent(msg), "_blank", "noopener");
+
+        var btn = bform.querySelector('button[type="submit"]') || bform.querySelector("button");
+        if (btn && !btn.__busy) {
+          btn.__busy = true;
+          var old = btn.textContent;
+          btn.textContent = "WhatsApp açılıyor…";
+          setTimeout(function () { btn.textContent = old; btn.__busy = false; }, 3500);
+        }
+      }, false);
     }
 
     /* 6) IntersectionObserver: eleman gorunur olunca .fr-in ekle (KILIT SATIR)
