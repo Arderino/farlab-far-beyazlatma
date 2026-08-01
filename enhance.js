@@ -9,7 +9,7 @@
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ==== TEK NUMARA ==== degistirince hem WhatsApp yuvarlagi hem randevu formu birlikte guncellenir.
-  // TEMSILI — gercek FarTech numarasiyla degistir (baginda 90, bosluksuz):
+  // FarTech WhatsApp numarasi (Arda onayladi 2026-08-02, gercek numara; format: bagi 90, bosluksuz):
   var WA = "905551066352";
 
   // JS aktif: reveal elemanlarini gizlemeye izin ver (JS yoksa gizlenmez).
