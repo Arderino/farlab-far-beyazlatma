@@ -90,6 +90,50 @@
       }
     }
 
+    /* 5c) Guven seridi + musteri yorumlari — firma bandi ile randevu arasi.
+       TEMSILI icerik: gercek yorum/rakamlar sonra degistirilecek. */
+    if (!D.querySelector(".fx-trust")) {
+      var banchor = D.querySelector(".booking-section") || D.querySelector("footer");
+      if (banchor && banchor.parentNode) {
+        var reviews = [
+          { t: "Farlarım sararmıştı, değiştireceğim sanıyordum; işlem sonrası gerçekten yeni gibi oldu — hem de çok daha uygun fiyata.", n: "Mehmet K.", c: "Passat sahibi", a: "MK" },
+          { t: "Gece görüşüm belirgin şekilde arttı. Temiz, hızlı ve güler yüzlü bir hizmet. Teşekkürler.", n: "Ayşe D.", c: "Clio sahibi", a: "AD" },
+          { t: "İki farı da yaptırdım, aradaki fark inanılmaz. Aracın önü tamamen değişti.", n: "Burak T.", c: "Corolla sahibi", a: "BT" }
+        ];
+        var cards = reviews.map(function (r) {
+          return '<figure class="fx-review fr-reveal">' +
+            '<div class="fx-review-stars" aria-label="5 uzerinden 5">★★★★★</div>' +
+            '<blockquote>“' + r.t + '”</blockquote>' +
+            '<figcaption><span class="fx-ava">' + r.a + '</span>' +
+            '<span class="fx-review-who"><b>' + r.n + '</b><span>' + r.c + '</span></span></figcaption>' +
+            '</figure>';
+        }).join("");
+
+        var tsec = D.createElement("section");
+        tsec.className = "fx-trust";
+        tsec.innerHTML =
+          '<div class="fx-trust-inner">' +
+            '<div class="fx-trust-head fr-reveal">' +
+              '<div class="fx-trust-kicker">MÜŞTERİ YORUMLARI</div>' +
+              '<h2 class="fx-trust-title">Farını yenileyenler ne diyor?</h2>' +
+            '</div>' +
+            '<div class="fx-trust-stats">' +
+              '<div class="fx-stat fr-reveal"><span class="fx-stat-num">200+</span><span class="fx-stat-lbl">yenilenen far</span></div>' +
+              '<div class="fx-stat fr-reveal"><span class="fx-stat-num">4.9<span class="fx-stat-star">★</span></span><span class="fx-stat-lbl">müşteri puanı</span></div>' +
+              '<div class="fx-stat fr-reveal"><span class="fx-stat-num">Garanti</span><span class="fx-stat-lbl">memnun kalmazsan</span></div>' +
+            '</div>' +
+            '<div class="fx-trust-reviews">' + cards + '</div>' +
+          '</div>';
+        banchor.parentNode.insertBefore(tsec, banchor);
+
+        // stagger (dalga) — bu elemanlar block 6'daki gozlemciye dahil olur
+        var st = tsec.querySelectorAll(".fx-trust-reviews > .fx-review");
+        for (var i = 0; i < st.length; i++) st[i].style.transitionDelay = (i * 90) + "ms";
+        var sc = tsec.querySelectorAll(".fx-trust-stats > .fx-stat");
+        for (var j = 0; j < sc.length; j++) sc[j].style.transitionDelay = (j * 70) + "ms";
+      }
+    }
+
     /* 6) IntersectionObserver: eleman gorunur olunca .fr-in ekle (KILIT SATIR)
        ONEMLI: siniflar mount'tan SONRA eklendigi icin, ilk gizlemeyi
        transition'siz yapariz (fr-prep) -> "sonup tekrar belirme" flasi olmaz. */

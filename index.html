@@ -124,6 +124,56 @@
   transform: translateY(-1px);
 }
 
+/* ---------- #5: Guven seridi + musteri yorumlari (randevunun hemen ustu) ----------
+   TEMSILI icerik — gercek yorum/rakamlar sonra konacak. Allbirds/Glossier dersi: kanit -> CTA. */
+.fx-trust{
+  padding: 78px 24px;
+  background: radial-gradient(circle at 50% 0%, rgba(20,120,190,.10), transparent 55%), #060c13;
+  border-top: 1px solid #ffffff0f;
+}
+.fx-trust-inner{ max-width: 1040px; margin: 0 auto; }
+.fx-trust-head{ text-align: center; margin-bottom: 38px; }
+.fx-trust-kicker{
+  color: #e7b44d; letter-spacing: .18em; font-size: 11px; font-weight: 850; text-transform: uppercase;
+}
+.fx-trust-title{
+  font-size: clamp(24px, 4vw, 34px); font-weight: 800; margin: .45em 0 0;
+  color: #eef6ff; letter-spacing: -.01em;
+}
+.fx-trust-stats{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  max-width: 720px; margin: 0 auto 30px;
+}
+.fx-stat{
+  text-align: center; border-radius: 16px; padding: 22px 14px;
+  background: linear-gradient(150deg, #ffffff0c, transparent 40%), #0b141c;
+  border: 1px solid #ffffff14;
+}
+.fx-stat-num{ display: block; font-size: 30px; font-weight: 800; color: #eef6ff; line-height: 1; }
+.fx-stat-star{ color: #e7b44d; margin-left: 3px; }
+.fx-stat-lbl{ display: block; margin-top: 9px; color: #9cabb7; font-size: 13px; }
+.fx-trust-reviews{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.fx-review{
+  margin: 0; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px;
+  background: linear-gradient(150deg, #ffffff0a, transparent 42%), #0a121b;
+  border: 1px solid #ffffff12;
+}
+.fx-review-stars{ color: #e7b44d; letter-spacing: 2px; font-size: 15px; }
+.fx-review blockquote{ margin: 0; color: #dce6f0; font-size: 15px; line-height: 1.62; }
+.fx-review figcaption{ display: flex; align-items: center; gap: 12px; margin-top: auto; }
+.fx-ava{
+  width: 40px; height: 40px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; font-weight: 800; font-size: 14px; color: #081017;
+  background: linear-gradient(135deg, #f5d171, #d59a30);
+}
+.fx-review-who{ display: flex; flex-direction: column; line-height: 1.3; }
+.fx-review-who b{ color: #eef6ff; font-size: 14px; }
+.fx-review-who span{ color: #8595a4; font-size: 12px; }
+@media (max-width: 820px){
+  .fx-trust-reviews{ grid-template-columns: 1fr; }
+  .fx-trust-stats{ grid-template-columns: 1fr; max-width: 340px; }
+}
+
 /* ---------- Erisilebilirlik: hareket azaltma tercihi ---------- */
 @media (prefers-reduced-motion: reduce){
   .fr-reveal{ opacity: 1 !important; transform: none !important; transition: none !important; }
@@ -232,6 +282,50 @@ Error generating stack: `+e.message+`
             '<p class="fx-firma-tag">Sararmış ve matlaşmış farları ilk günkü netliğine döndürüyoruz. Marka bağımsız, garantili işçilik.</p>' +
           '</div>';
         anchor.parentNode.insertBefore(fsec, anchor);
+      }
+    }
+
+    /* 5c) Guven seridi + musteri yorumlari — firma bandi ile randevu arasi.
+       TEMSILI icerik: gercek yorum/rakamlar sonra degistirilecek. */
+    if (!D.querySelector(".fx-trust")) {
+      var banchor = D.querySelector(".booking-section") || D.querySelector("footer");
+      if (banchor && banchor.parentNode) {
+        var reviews = [
+          { t: "Farlarım sararmıştı, değiştireceğim sanıyordum; işlem sonrası gerçekten yeni gibi oldu — hem de çok daha uygun fiyata.", n: "Mehmet K.", c: "Passat sahibi", a: "MK" },
+          { t: "Gece görüşüm belirgin şekilde arttı. Temiz, hızlı ve güler yüzlü bir hizmet. Teşekkürler.", n: "Ayşe D.", c: "Clio sahibi", a: "AD" },
+          { t: "İki farı da yaptırdım, aradaki fark inanılmaz. Aracın önü tamamen değişti.", n: "Burak T.", c: "Corolla sahibi", a: "BT" }
+        ];
+        var cards = reviews.map(function (r) {
+          return '<figure class="fx-review fr-reveal">' +
+            '<div class="fx-review-stars" aria-label="5 uzerinden 5">★★★★★</div>' +
+            '<blockquote>“' + r.t + '”</blockquote>' +
+            '<figcaption><span class="fx-ava">' + r.a + '</span>' +
+            '<span class="fx-review-who"><b>' + r.n + '</b><span>' + r.c + '</span></span></figcaption>' +
+            '</figure>';
+        }).join("");
+
+        var tsec = D.createElement("section");
+        tsec.className = "fx-trust";
+        tsec.innerHTML =
+          '<div class="fx-trust-inner">' +
+            '<div class="fx-trust-head fr-reveal">' +
+              '<div class="fx-trust-kicker">MÜŞTERİ YORUMLARI</div>' +
+              '<h2 class="fx-trust-title">Farını yenileyenler ne diyor?</h2>' +
+            '</div>' +
+            '<div class="fx-trust-stats">' +
+              '<div class="fx-stat fr-reveal"><span class="fx-stat-num">200+</span><span class="fx-stat-lbl">yenilenen far</span></div>' +
+              '<div class="fx-stat fr-reveal"><span class="fx-stat-num">4.9<span class="fx-stat-star">★</span></span><span class="fx-stat-lbl">müşteri puanı</span></div>' +
+              '<div class="fx-stat fr-reveal"><span class="fx-stat-num">Garanti</span><span class="fx-stat-lbl">memnun kalmazsan</span></div>' +
+            '</div>' +
+            '<div class="fx-trust-reviews">' + cards + '</div>' +
+          '</div>';
+        banchor.parentNode.insertBefore(tsec, banchor);
+
+        // stagger (dalga) — bu elemanlar block 6'daki gozlemciye dahil olur
+        var st = tsec.querySelectorAll(".fx-trust-reviews > .fx-review");
+        for (var i = 0; i < st.length; i++) st[i].style.transitionDelay = (i * 90) + "ms";
+        var sc = tsec.querySelectorAll(".fx-trust-stats > .fx-stat");
+        for (var j = 0; j < sc.length; j++) sc[j].style.transitionDelay = (j * 70) + "ms";
       }
     }
 
