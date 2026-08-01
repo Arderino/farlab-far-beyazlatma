@@ -171,6 +171,88 @@
       }, false);
     }
 
+    /* 5e) ONCE/SONRA kaydirmali hero gorseli — far beyazlatma zaten bir once/sonra urunu.
+       TEMSILI far cizimi; gercek foto gelince iki layer'daki svg birer <img> ile degistirilir. */
+    var heroVisual = D.querySelector(".hero-visual");
+    if (heroVisual && !heroVisual.querySelector(".fx-ba-wrap")) {
+
+      function lamp(state) {
+        var before = state === "before";
+        var housing = before ? "#181410" : "#0e1319";
+        var lensA = before ? "#c9a24a" : "#bfe9f6", lensB = before ? "#8f7326" : "#5bb9d6";
+        var glow = before ? 0 : 1, haze = before ? 0.55 : 0;
+        return '' +
+          '<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">' +
+          '<defs>' +
+          '<radialGradient id="lg-' + state + '" cx="42%" cy="42%" r="65%">' +
+          '<stop offset="0%" stop-color="' + lensA + '"/><stop offset="70%" stop-color="' + lensB + '"/>' +
+          '<stop offset="100%" stop-color="' + (before ? "#5c4a1c" : "#1c5f76") + '"/></radialGradient>' +
+          '<filter id="bl-' + state + '"><feGaussianBlur stdDeviation="' + (before ? 4.5 : 0.4) + '"/></filter>' +
+          '</defs>' +
+          '<rect width="400" height="300" fill="' + (before ? "#0a0805" : "#070c11") + '"/>' +
+          '<rect x="-20" y="196" width="440" height="140" fill="' + (before ? "#141210" : "#0c1116") + '"/>' +
+          '<path d="M60 118 L330 92 Q360 94 362 124 L360 182 Q358 206 330 210 L90 202 Q64 198 60 170 Z" fill="' + housing + '" stroke="' + (before ? "#2a2110" : "#223038") + '" stroke-width="2"/>' +
+          '<g filter="url(#bl-' + state + ')">' +
+          '<ellipse cx="150" cy="150" rx="60" ry="44" fill="url(#lg-' + state + ')"/>' +
+          '<ellipse cx="150" cy="150" rx="30" ry="23" fill="' + (before ? "#6b571f" : "#eaf8fd") + '" opacity="' + (before ? 0.5 : 0.95) + '"/>' +
+          '<rect x="215" y="122" width="128" height="10" rx="5" fill="' + (before ? "#7a6428" : "#bfe9f6") + '" opacity="' + (before ? 0.55 : 0.95) + '"/>' +
+          '<rect x="215" y="168" width="110" height="8" rx="4" fill="' + (before ? "#6b571f" : "#8fd3e8") + '" opacity="' + (before ? 0.45 : 0.85) + '"/></g>' +
+          '<ellipse cx="150" cy="150" rx="80" ry="58" fill="#bfe9f6" opacity="' + (glow * 0.18) + '"/>' +
+          '<ellipse cx="279" cy="127" rx="82" ry="17" fill="#bfe9f6" opacity="' + (glow * 0.14) + '"/>' +
+          '<rect width="400" height="300" fill="#caa23e" opacity="' + (haze * 0.28) + '"/>' +
+          '<rect width="400" height="300" fill="#3a2f12" opacity="' + (haze * 0.15) + '"/>' +
+          '</svg>';
+      }
+
+      var wrap = D.createElement("div");
+      wrap.className = "fx-ba-wrap";
+      wrap.innerHTML =
+        '<p class="fx-ba-cap">Aynı far — <b>kaydır</b> ve farkı gör</p>' +
+        '<div class="fx-ba">' +
+          '<div class="fx-ba-layer">' + lamp("before") + '</div>' +
+          '<div class="fx-ba-layer fx-ba-after">' + lamp("after") + '</div>' +
+          '<span class="fx-ba-tag b">Önce</span>' +
+          '<span class="fx-ba-tag a">Sonra</span>' +
+          '<input type="range" min="0" max="100" value="50" aria-label="Önce ve sonra karşılaştırma kaydırıcısı">' +
+          '<div class="fx-ba-div"></div>' +
+          '<div class="fx-ba-knob">⇄</div>' +
+        '</div>' +
+        '<div class="fx-ba-brosur"><button type="button">📄 Kampanya broşürünü gör</button></div>';
+
+      var poster = heroVisual.querySelector(".hero-poster-card");
+      if (poster) poster.style.display = "none";
+      heroVisual.insertBefore(wrap, heroVisual.firstChild);
+
+      var ba = wrap.querySelector(".fx-ba");
+      var range = wrap.querySelector('input[type="range"]');
+      function setx(v) { ba.style.setProperty("--x", v + "%"); }
+      setx(50);
+
+      var hinting = !reduce;
+      range.addEventListener("input", function () {
+        if (hinting) { hinting = false; ba.classList.remove("fx-hint"); }
+        setx(range.value);
+      });
+
+      var bbtn = wrap.querySelector(".fx-ba-brosur button");
+      if (poster && bbtn) {
+        bbtn.addEventListener("click", function () {
+          var show = poster.style.display === "none";
+          poster.style.display = show ? "" : "none";
+          bbtn.textContent = show ? "▲ Broşürü gizle" : "📄 Kampanya broşürünü gör";
+        });
+      }
+
+      /* tek seferlik ipucu: kaydirici kendiliginden bir suzulur (kullanici dokununca iptal) */
+      if (!reduce) {
+        ba.classList.add("fx-hint");
+        setTimeout(function () { if (hinting) setx(72); }, 550);
+        setTimeout(function () { if (hinting) setx(30); }, 1350);
+        setTimeout(function () { if (hinting) setx(50); }, 2150);
+        setTimeout(function () { ba.classList.remove("fx-hint"); }, 2950);
+      }
+    }
+
     /* 6) IntersectionObserver: eleman gorunur olunca .fr-in ekle (KILIT SATIR)
        ONEMLI: siniflar mount'tan SONRA eklendigi icin, ilk gizlemeyi
        transition'siz yapariz (fr-prep) -> "sonup tekrar belirme" flasi olmaz. */
