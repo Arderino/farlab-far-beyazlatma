@@ -81,8 +81,38 @@
   color: #c9d6e5; font-size: 1.05rem; line-height: 1.65;
 }
 
+/* ---------- #2 CILA: hero "far isigi" — parlasin kelimesi restore edilmis far gibi yanar ----------
+   Site zaten koyu premium; bu, Porsche/Linear seviyesi tek guclu vurgu (imza an). */
+.hero-section .hero-copy h1 span,
+.hero-copy h1 span{
+  /* soguk beyaz -> temiz camgobegi (yorgun sari degil, yeni far isigi) */
+  background-image: linear-gradient(105deg, #ffffff 0%, #d7f2fb 42%, #9fe0f2 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+  /* glyph seklini takip eden yumusak isik halesi */
+  filter: drop-shadow(0 0 14px rgba(159,224,242,.55)) drop-shadow(0 0 30px rgba(159,224,242,.28));
+  animation: fxLampGlow 5s ease-in-out infinite;
+}
+@keyframes fxLampGlow{
+  0%, 100%{ filter: drop-shadow(0 0 10px rgba(159,224,242,.42)) drop-shadow(0 0 24px rgba(159,224,242,.20)); }
+  50%     { filter: drop-shadow(0 0 18px rgba(159,224,242,.70)) drop-shadow(0 0 40px rgba(159,224,242,.34)); }
+}
+
+/* ---------- #2 CILA: birincil CTA'ya ince altin hale (nabizla cakismaz, sakin baglar) ---------- */
+.nav-cta{
+  box-shadow: 0 8px 26px -10px rgba(224,180,75,.55) !important;
+  transition: box-shadow .3s var(--fr-ease), transform .3s var(--fr-ease);
+}
+.nav-cta:hover{
+  box-shadow: 0 12px 34px -10px rgba(224,180,75,.7) !important;
+  transform: translateY(-1px);
+}
+
 /* ---------- Erisilebilirlik: hareket azaltma tercihi ---------- */
 @media (prefers-reduced-motion: reduce){
   .fr-reveal{ opacity: 1 !important; transform: none !important; transition: none !important; }
   .fx-floaty, .fx-pulse::after, .fx-wa::before{ animation: none !important; }
+  .hero-section .hero-copy h1 span, .hero-copy h1 span{ animation: none !important; }
 }
