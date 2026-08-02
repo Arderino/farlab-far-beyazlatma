@@ -177,30 +177,56 @@
     if (heroVisual && !heroVisual.querySelector(".fx-ba-wrap")) {
 
       function lamp(state) {
-        var before = state === "before";
-        var housing = before ? "#181410" : "#0e1319";
-        var lensA = before ? "#c9a24a" : "#bfe9f6", lensB = before ? "#8f7326" : "#5bb9d6";
-        var glow = before ? 0 : 1, haze = before ? 0.55 : 0;
+        var A = state === "after", u = state;   // u: her SVG icin benzersiz id soneki
+        // reflektor facet cizgileri (housing icinde ince yansimalar)
+        var refl = "";
+        for (var k = 0; k < 6; k++) {
+          refl += '<rect x="' + (200 + k * 26) + '" y="98" width="2" height="96" rx="1" fill="#ffffff" opacity="' + (A ? 0.10 : 0.05) + '"/>';
+        }
         return '' +
           '<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">' +
           '<defs>' +
-          '<radialGradient id="lg-' + state + '" cx="42%" cy="42%" r="65%">' +
-          '<stop offset="0%" stop-color="' + lensA + '"/><stop offset="70%" stop-color="' + lensB + '"/>' +
-          '<stop offset="100%" stop-color="' + (before ? "#5c4a1c" : "#1c5f76") + '"/></radialGradient>' +
-          '<filter id="bl-' + state + '"><feGaussianBlur stdDeviation="' + (before ? 4.5 : 0.4) + '"/></filter>' +
+            '<linearGradient id="bg-' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1016"/><stop offset="1" stop-color="#05080c"/></linearGradient>' +
+            '<radialGradient id="vig-' + u + '" cx="50%" cy="42%" r="72%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.55"/></radialGradient>' +
+            '<linearGradient id="hous-' + u + '" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#20262d"/><stop offset="0.5" stop-color="#0d1116"/><stop offset="1" stop-color="#05080b"/></linearGradient>' +
+            '<linearGradient id="chr-' + u + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7d2dc"/><stop offset="0.5" stop-color="#6b7681"/><stop offset="1" stop-color="#aeb9c4"/></linearGradient>' +
+            '<radialGradient id="lens-' + u + '" cx="42%" cy="40%" r="62%">' +
+              (A
+                ? '<stop offset="0" stop-color="#ffffff"/><stop offset="0.35" stop-color="#dff2fb"/><stop offset="0.75" stop-color="#7fb9d4"/><stop offset="1" stop-color="#20455a"/>'
+                : '<stop offset="0" stop-color="#f4e7bf"/><stop offset="0.4" stop-color="#c9a85e"/><stop offset="0.8" stop-color="#8a6f2f"/><stop offset="1" stop-color="#4c3d18"/>') +
+            '</radialGradient>' +
+            '<linearGradient id="drl-' + u + '" x1="0" y1="0" x2="1" y2="0">' +
+              (A ? '<stop offset="0" stop-color="#eaf8fd"/><stop offset="1" stop-color="#9fe0f2"/>'
+                 : '<stop offset="0" stop-color="#b7a05a"/><stop offset="1" stop-color="#8a7638"/>') +
+            '</linearGradient>' +
+            '<filter id="oxi-' + u + '" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.9 0.55" numOctaves="2" seed="7" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0.72  0 0 0 0 0.58  0 0 0 0 0.24  0 0 0 0.5 0"/></filter>' +
+            '<filter id="haze-' + u + '"><feGaussianBlur stdDeviation="' + (A ? 0 : 2.2) + '"/></filter>' +
+            '<linearGradient id="gloss-' + u + '" x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="' + (A ? 0.5 : 0.12) + '"/><stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/></linearGradient>' +
           '</defs>' +
-          '<rect width="400" height="300" fill="' + (before ? "#0a0805" : "#070c11") + '"/>' +
-          '<rect x="-20" y="196" width="440" height="140" fill="' + (before ? "#141210" : "#0c1116") + '"/>' +
-          '<path d="M60 118 L330 92 Q360 94 362 124 L360 182 Q358 206 330 210 L90 202 Q64 198 60 170 Z" fill="' + housing + '" stroke="' + (before ? "#2a2110" : "#223038") + '" stroke-width="2"/>' +
-          '<g filter="url(#bl-' + state + ')">' +
-          '<ellipse cx="150" cy="150" rx="60" ry="44" fill="url(#lg-' + state + ')"/>' +
-          '<ellipse cx="150" cy="150" rx="30" ry="23" fill="' + (before ? "#6b571f" : "#eaf8fd") + '" opacity="' + (before ? 0.5 : 0.95) + '"/>' +
-          '<rect x="215" y="122" width="128" height="10" rx="5" fill="' + (before ? "#7a6428" : "#bfe9f6") + '" opacity="' + (before ? 0.55 : 0.95) + '"/>' +
-          '<rect x="215" y="168" width="110" height="8" rx="4" fill="' + (before ? "#6b571f" : "#8fd3e8") + '" opacity="' + (before ? 0.45 : 0.85) + '"/></g>' +
-          '<ellipse cx="150" cy="150" rx="80" ry="58" fill="#bfe9f6" opacity="' + (glow * 0.18) + '"/>' +
-          '<ellipse cx="279" cy="127" rx="82" ry="17" fill="#bfe9f6" opacity="' + (glow * 0.14) + '"/>' +
-          '<rect width="400" height="300" fill="#caa23e" opacity="' + (haze * 0.28) + '"/>' +
-          '<rect width="400" height="300" fill="#3a2f12" opacity="' + (haze * 0.15) + '"/>' +
+          '<rect width="400" height="300" fill="url(#bg-' + u + ')"/>' +
+          // araba govdesi ipucu (kaput + tampon)
+          '<path d="M-20 58 Q120 18 205 44 L205 0 L-20 0 Z" fill="#0e141a"/>' +
+          '<path d="M-20 234 Q200 212 420 238 L420 300 L-20 300 Z" fill="#0a0e13"/>' +
+          // ===== far kumesi =====
+          '<g filter="url(#haze-' + u + ')">' +
+            '<path d="M52 96 L338 74 Q372 76 374 112 L370 176 Q366 202 332 206 L84 198 Q54 194 50 160 Z" fill="url(#chr-' + u + ')"/>' +
+            '<path d="M62 104 L332 84 Q360 86 362 116 L358 172 Q355 194 328 198 L92 190 Q66 186 63 158 Z" fill="url(#hous-' + u + ')"/>' +
+            refl +
+            '<ellipse cx="140" cy="146" rx="46" ry="40" fill="#05080b"/>' +
+            '<ellipse cx="140" cy="146" rx="40" ry="35" fill="url(#lens-' + u + ')"/>' +
+            '<ellipse cx="140" cy="146" rx="22" ry="19" fill="' + (A ? "#ffffff" : "#e9d9a4") + '" opacity="' + (A ? 0.95 : 0.6) + '"/>' +
+            '<ellipse cx="131" cy="137" rx="7" ry="5" fill="#ffffff" opacity="' + (A ? 0.95 : 0.35) + '"/>' +
+            '<rect x="196" y="104" width="150" height="12" rx="6" fill="url(#drl-' + u + ')" opacity="' + (A ? 0.98 : 0.5) + '"/>' +
+            '<rect x="196" y="150" width="120" height="8" rx="4" fill="url(#drl-' + u + ')" opacity="' + (A ? 0.8 : 0.4) + '"/>' +
+            '<rect x="196" y="126" width="90" height="7" rx="3.5" fill="' + (A ? "#f2b34a" : "#8f7a3c") + '" opacity="' + (A ? 0.85 : 0.4) + '"/>' +
+          '</g>' +
+          // sonra: DRL + lens etrafinda hafif bloom
+          (A ? '<ellipse cx="140" cy="146" rx="70" ry="55" fill="#bfe9f6" opacity="0.16"/><rect x="196" y="102" width="150" height="16" rx="8" fill="#dff5fb" opacity="0.12"/>' : '') +
+          // once: oksidasyon bulutlu film + sari sis + matlik
+          (!A ? '<rect x="50" y="74" width="324" height="132" filter="url(#oxi-' + u + ')" opacity="0.5"/><ellipse cx="150" cy="150" rx="150" ry="82" fill="#c9a23e" opacity="0.16"/><rect width="400" height="300" fill="#b7902f" opacity="0.10"/><rect width="400" height="300" fill="#2a2008" opacity="0.10"/>' : '') +
+          // cam parlaklik cizgisi (sonra'da daha guclu)
+          '<path d="M60 96 L200 84 L150 150 L70 150 Z" fill="url(#gloss-' + u + ')"/>' +
+          '<rect width="400" height="300" fill="url(#vig-' + u + ')"/>' +
           '</svg>';
       }
 
