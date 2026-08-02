@@ -18,6 +18,11 @@ const enhCss    = safeCss(R('enhance.css'));
 const firmaMime = (function(){ const b = fs.readFileSync(path.join(DIR,'fartech-logo.jpg')); return (b[0]===0xFF&&b[1]===0xD8)?'image/jpeg':(b[0]===0x89?'image/png':'application/octet-stream'); })();
 const firmaData = 'data:' + firmaMime + ';base64,' + B64('fartech-logo.jpg');
 let enhJsRaw    = R('enhance.js').split('__FIRMA_IMG__').join(firmaData);
+// once/sonra far fotograflari (before/after slider) -> data-URI gom
+function sniffImg(f){ const b=fs.readFileSync(path.join(DIR,f)); if(b[0]===0xFF&&b[1]===0xD8)return'image/jpeg'; if(b[0]===0x89&&b[1]===0x50)return'image/png'; if(b.slice(0,4).toString()==='RIFF')return'image/webp'; return'application/octet-stream'; }
+const baOnce  = 'data:' + sniffImg('far-once.png')  + ';base64,' + B64('far-once.png');
+const baSonra = 'data:' + sniffImg('far-sonra.png') + ';base64,' + B64('far-sonra.png');
+enhJsRaw = enhJsRaw.split('__BA_ONCE__').join(baOnce).split('__BA_SONRA__').join(baSonra);
 const enhJs     = safeJs(enhJsRaw);
 
 // gorseli data-URI yap (gercek turu sihirli baytlardan sniff et), bundle referansini degistir
